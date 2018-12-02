@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 
-class App extends Component {
+export class App extends Component {
   render() {
     return (
-      <h1>Hello world</h1>
+      <>
+        <h1>{this.props.store.word}</h1>
+        <h2>{this.props.store.shuffledLetters}</h2>
+      </>
     );
   }
-}
-
-export default App;
+};
