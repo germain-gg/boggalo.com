@@ -1,6 +1,7 @@
-import { types, onAction } from "mobx-state-tree";
+import { types } from "mobx-state-tree";
 
 import { Letter } from "./Letter";
+import { Word } from "./Word";
 
 import { shuffle } from "../utils";
 
@@ -13,27 +14,50 @@ export const App = types.model("App", {
     selectedLetters: types.optional(
         types.array(types.reference(Letter)),
         []
+    ),
+    submittedWords: types.optional(
+        types.array(Word),
+        []
     )
 })
-.actions(self => ({
-    
-    afterCreate() {
+.actions(self => {
+
+    const afterCreate = () => {
         const letters = self.word
             .split("")
             .map(letter => Letter.create({ letter }));
         self.shuffledWord = shuffle(letters);
-    },
+    };
 
-    addLetter(letter) {
+    const addLetter = (letter) => {
         self.selectedLetters.push(letter.id);
-    },
+    };
 
-    removeLetter({ id }) {
+    const removeLetter = ({ id }) => {
         self.selectedLetters = self.selectedLetters.filter(letter => letter.id !== id);
+    };
+
+    const clearSelection = () => {
+        self.selectedLetters.forEach(({ toggle }) => toggle());
+    }
+
+    const validateWord = () => {
+        self.submittedWords.push({ word: self.selectedWord });
+        self.clearSelection();
+    };
+
+    return {
+        afterCreate,
+        addLetter,
+        removeLetter,
+        validateWord,
+        clearSelection
+    };
+})
+.views(self => ({
+
+    get selectedWord() {
+        return self.selectedLetters.map(({letter}) => letter).join("");
     }
 
 }))
-.views(self => ({
-
-
-}));

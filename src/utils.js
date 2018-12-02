@@ -7,3 +7,6 @@ export const shuffle = array => {
 }
 
 export const generateId = () => Math.random().toString(36).substr(2, 9);
+
+export const API_URL = "https://od-api.oxforddictionaries.com/api/v1";
+export const API_KEY = "b1b21e4ef3cd65ef9028efb6fb380e0f";

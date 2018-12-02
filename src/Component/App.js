@@ -1,21 +1,80 @@
 import React, { Component } from 'react';
 
+import { BoggleBoard, ResultBoard, Letter } from "../Style/Styled";
+
 export class App extends Component {
   render() {
-    const { word, shuffledWord, selectedLetters } = this.props.store;
+    const { shuffledWord, selectedLetters, validateWord, clearSelection, submittedWords } = this.props.store;
     return (
       <>
-        <h1>{word}</h1>
+        <h1>Boggalo</h1>
 
-        <div className="grid">
+        <BoggleBoard>
           {shuffledWord.map(({ id, toggle, selected, letter }) => (
-            <div key={id} className="letter" onClick={toggle} data-selected={selected}>
+            <Letter key={id} onClick={toggle} selected={selected}>
               {letter}
-            </div>
+            </Letter>
           ))}
-        </div>
+        </BoggleBoard>
+        
+        <ResultBoard>
+          {selectedLetters.map(({ id, letter, toggle }) => (
+            <Letter key={id} onClick={toggle}>
+              {letter}
+            </Letter>
+          ))}
 
-        { selectedLetters.map(({letter}) => letter) }
+          { selectedLetters.length >= 2 && (
+            <Letter onClick={validateWord}>
+              <span role="img" aria-label="Green tick">✅</span>
+            </Letter>
+          )}
+          { selectedLetters.length >= 1 && (
+            <Letter onClick={clearSelection}>
+              <span role="img" aria-label="Stop sign">⛔️</span>
+            </Letter>
+          )}
+        </ResultBoard>
+
+        <hr/>
+
+        <table>
+          <thead>
+            <tr>
+              <th>
+                Word
+              </th>
+              <th>
+                Length
+              </th>
+              <th>
+                Exists
+              </th>
+              <th>
+                Description
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            { submittedWords.map(({word, length, description, exists, ready}) => (
+              <tr key={word}>
+                <td>
+                  {word}
+                </td>
+                <td>
+                  {length}
+                </td>
+                <td>
+                  { ready ? (exists ? "✅" : "⛔️") : "⏳"}
+                </td>
+                <td>
+                  {ready ? description : "⏳"}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        
       </>
     );
   }
