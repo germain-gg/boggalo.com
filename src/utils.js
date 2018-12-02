@@ -1,3 +1,5 @@
+import axios from "axios";
+
 export const shuffle = array => {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -6,7 +8,21 @@ export const shuffle = array => {
     return array;
 }
 
+export const random = max => {
+    return Math.floor(Math.random() * Math.floor(max));
+};
+
 export const generateId = () => Math.random().toString(36).substr(2, 9);
 
-export const API_URL = "https://od-api.oxforddictionaries.com/api/v1";
-export const API_KEY = "b1b21e4ef3cd65ef9028efb6fb380e0f";
+const wordsApi = axios.create({
+    baseURL: "https://wordsapiv1.p.rapidapi.com",
+    headers: {
+        "Accept": "application/json",
+        "Access-Control-Allow-Origin": "*",
+        "X-RapidAPI-Key": ""
+    }
+})
+
+export const getDefinitions = word => wordsApi.get(`/words/${word}/definitions`);
+
+export const STATES = Object.freeze(["ready", "error", "loading"]);

@@ -10,9 +10,7 @@ import { App as AppStore } from './Store/App';
 
 const Boggalo = observer(AppComponent);
 
-const store = AppStore.create({
-    word: "zugzwangs"
-});
+const store = AppStore.create({});
 
 ReactDOM.render(
     <Boggalo store={store} />,

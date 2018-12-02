@@ -56,7 +56,7 @@ export class App extends Component {
             </tr>
           </thead>
           <tbody>
-            { submittedWords.map(({word, length, description, exists, ready}) => (
+            { submittedWords.map(({word, length, description, isLoading, exists}) => (
               <tr key={word}>
                 <td>
                   {word}
@@ -65,10 +65,10 @@ export class App extends Component {
                   {length}
                 </td>
                 <td>
-                  { ready ? (exists ? "✅" : "⛔️") : "⏳"}
+                  { !isLoading ? (exists ? "✅" : "⛔️") : "⏳"}
                 </td>
                 <td>
-                  {ready ? description : "⏳"}
+                  { !isLoading ? description : "⏳"}
                 </td>
               </tr>
             ))}

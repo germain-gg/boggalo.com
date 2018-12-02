@@ -1,12 +1,20 @@
-import { types } from "mobx-state-tree";
+import { types, flow } from "mobx-state-tree";
 
 import { Letter } from "./Letter";
 import { Word } from "./Word";
 
-import { shuffle } from "../utils";
+import { shuffle, random, STATES } from "../utils";
 
 export const App = types.model("App", {
-    word: types.string,
+    state: types.optional(
+        types.refinement(types.string, val => STATES.includes(val)),
+        "loading"
+    ),
+    matriceSize: types.optional(
+        types.refinement(types.number, num => num === 3 || num === 4),
+        3
+    ),
+    word: types.optional(types.string, ""),
     shuffledWord: types.optional(
         types.array(Letter),
         []
@@ -22,12 +30,25 @@ export const App = types.model("App", {
 })
 .actions(self => {
 
-    const afterCreate = () => {
-        const letters = self.word
-            .split("")
-            .map(letter => Letter.create({ letter }));
-        self.shuffledWord = shuffle(letters);
-    };
+    const afterCreate = () => (getWords(self.matriceSize));
+
+    const getWords = flow(function*(matriceSize){
+        const fileName = `${matriceSize * matriceSize}.json`;
+        try {
+            const response = yield fetch(fileName);
+            const words = yield response.json();
+            self.state = "ready";
+            self.word = words[random(words.length)];
+
+            const letters = self.word
+                .split("")
+                .map(letter => Letter.create({ letter }));
+        
+            self.shuffledWord = shuffle(letters);
+        } catch (e) {
+            self.state = "error";
+        }
+    });
 
     const addLetter = (letter) => {
         self.selectedLetters.push(letter.id);
