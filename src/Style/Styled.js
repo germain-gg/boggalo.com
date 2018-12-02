@@ -24,11 +24,12 @@ export const Letter = styled.div`
 
 export const BoggleBoard = styled.div`
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(3, 1fr);
+    grid-template-columns: repeat(${props => props.size}, 1fr);
+    grid-template-rows: repeat(${props => props.size}, 1fr);
     border: 1px solid black;
     max-width: 500px;
     margin: 20px auto;
+    position: relative;
 
     ${Letter} {
         font-size: 5vh;

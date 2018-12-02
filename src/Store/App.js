@@ -33,6 +33,7 @@ export const App = types.model("App", {
     const afterCreate = () => (getWords(self.matriceSize));
 
     const getWords = flow(function*(matriceSize){
+        self.state = "loading";
         const fileName = `${matriceSize * matriceSize}.json`;
         try {
             const response = yield fetch(fileName);
@@ -67,12 +68,19 @@ export const App = types.model("App", {
         self.clearSelection();
     };
 
+    const setMatriceSize = matriceSize => {
+        self.matriceSize = matriceSize;
+        clearSelection();
+        getWords(self.matriceSize);
+    }
+
     return {
         afterCreate,
         addLetter,
         removeLetter,
         validateWord,
-        clearSelection
+        clearSelection,
+        setMatriceSize
     };
 })
 .views(self => ({

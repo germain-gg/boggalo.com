@@ -4,12 +4,25 @@ import { BoggleBoard, ResultBoard, Letter } from "../Style/Styled";
 
 export class App extends Component {
   render() {
-    const { shuffledWord, selectedLetters, validateWord, clearSelection, submittedWords } = this.props.store;
+    const { shuffledWord, selectedLetters, validateWord, clearSelection, submittedWords, matriceSize, setMatriceSize, isLoading } = this.props.store;
     return (
       <>
         <h1>Boggalo</h1>
 
-        <BoggleBoard>
+        <hr/>
+
+        <center>
+          Board size 
+          <select defaultValue="3" onChange={evt => setMatriceSize(parseInt(evt.target.value))}>
+            <option value="3">3</option>
+            <option value="4">4</option>
+          </select>
+        </center>
+
+        <hr/>
+
+
+        <BoggleBoard size={matriceSize}>
           {shuffledWord.map(({ id, toggle, selected, letter }) => (
             <Letter key={id} onClick={toggle} selected={selected}>
               {letter}
