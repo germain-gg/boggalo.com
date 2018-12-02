@@ -1,24 +1,39 @@
-import { types } from "mobx-state-tree";
+import { types, onAction } from "mobx-state-tree";
+
+import { Letter } from "./Letter";
 
 import { shuffle } from "../utils";
 
-export const App = types.model({
+export const App = types.model("App", {
     word: types.string,
-    selectedLetters: types.maybe(
-        types.array(
-            types.refinement(types.string, str => str.length === 1)
-        ),
+    shuffledWord: types.optional(
+        types.array(Letter),
+        []
+    ),
+    selectedLetters: types.optional(
+        types.array(types.reference(Letter)),
         []
     )
 })
-.views(self => ({
+.actions(self => ({
     
-    get shuffledLetters() {
-        const letters = self.word.split("");
-        return shuffle(letters);
+    afterCreate() {
+        const letters = self.word
+            .split("")
+            .map(letter => Letter.create({ letter }));
+        self.shuffledWord = shuffle(letters);
+    },
+
+    addLetter(letter) {
+        self.selectedLetters.push(letter.id);
+    },
+
+    removeLetter({ id }) {
+        self.selectedLetters = self.selectedLetters.filter(letter => letter.id !== id);
     }
 
 }))
-.actions(self => ({
-    
+.views(self => ({
+
+
 }));
