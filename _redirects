@@ -1,0 +1,2 @@
+# Redirect default Netlify subdomain to primary domain
+http://upbeat-allen-46e8dc.netlify.com/* http://www.boggalo.com/:splat 301!
