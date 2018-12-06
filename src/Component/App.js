@@ -12,7 +12,7 @@ export class App extends Component {
         <hr/>
 
         <center>
-          Board size 
+          Board size
           <select defaultValue="3" onChange={evt => setMatriceSize(parseInt(evt.target.value))}>
             <option value="3">3</option>
             <option value="4">4</option>
@@ -29,7 +29,7 @@ export class App extends Component {
             </Letter>
           ))}
         </BoggleBoard>
-        
+
         <ResultBoard>
           {selectedLetters.map(({ id, letter, toggle }) => (
             <Letter key={id} onClick={toggle}>
@@ -87,7 +87,7 @@ export class App extends Component {
             ))}
           </tbody>
         </table>
-        
+
       </>
     );
   }
